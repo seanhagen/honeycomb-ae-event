@@ -93,9 +93,6 @@ func WrapHandlerFunc(hf func(http.ResponseWriter, *http.Request)) func(http.Resp
 		err := sendEvent(ctx, ev)
 		if err != nil {
 			log.Debugf(ctx, "error sending event to honeycomb: %v", err)
-		} else {
-			o, _ := json.Marshal(ev)
-			log.Debugf(ctx, "send event to honeycomb: %v", string(o))
 		}
 	}
 }
