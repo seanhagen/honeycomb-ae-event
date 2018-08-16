@@ -18,8 +18,8 @@ import (
 	"github.com/honeycombio/beeline-go/timer"
 	libhoney "github.com/honeycombio/libhoney-go"
 	"google.golang.org/appengine"
+	"google.golang.org/appengine/log"
 	"google.golang.org/appengine/urlfetch"
-	"vitess.io/vitess/go/vt/log"
 )
 
 const eventURLBase = "https://api.honeycomb.io/1/events/%v"
@@ -92,10 +92,10 @@ func WrapHandlerFunc(hf func(http.ResponseWriter, *http.Request)) func(http.Resp
 		ev.AddField("duration_ms", float64(time.Since(start))/float64(time.Millisecond))
 		err := sendEvent(ctx, ev)
 		if err != nil {
-			log.Errorf("error sending event to honeycomb: %v", err)
+			log.Debugf(ctx, "error sending event to honeycomb: %v", err)
 		} else {
-			o, _ = json.Marshal(ev)
-			log.Printf("send event to honeycomb: %v", string(o))
+			o, _ := json.Marshal(ev)
+			log.Debugf(ctx, "send event to honeycomb: %v", string(o))
 		}
 	}
 }
