@@ -64,7 +64,7 @@ func WrapHandlerFunc(hf func(http.ResponseWriter, *http.Request)) func(http.Resp
 		ctx := appengine.NewContext(r)
 		start := time.Now()
 
-		ev := beeline.ContextEvent(r.Context())
+		ev := beeline.ContextEvent(ctx)
 		if ev == nil {
 			ev = libhoney.NewEvent()
 			// put the event on the context for everybody downstream to use
