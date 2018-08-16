@@ -103,7 +103,7 @@ func WrapHandlerFunc(hf func(http.ResponseWriter, *http.Request)) func(http.Resp
 func sendEvent(ctx context.Context, ev *libhoney.Event) error {
 	httpClient := urlfetch.Client(ctx)
 
-	data, err := json.Marshal(ev)
+	data, err := json.Marshal(ev.Fields())
 	if err != nil {
 		return err
 	}
