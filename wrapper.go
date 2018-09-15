@@ -22,6 +22,7 @@ const defaultWriteKey = "sample-writekey"
 const defaultDataset = "honeycomb-sample"
 const defaultServiceName = "service"
 
+// Config ...
 type Config struct {
 	WriteKey    string
 	Dataset     string
@@ -30,6 +31,7 @@ type Config struct {
 
 var config Config
 
+// Init ...
 func Init(conf Config) {
 	c := Config{
 		WriteKey:    defaultWriteKey,
@@ -51,6 +53,7 @@ func Init(conf Config) {
 	return
 }
 
+// WrapHandlerFunc ...
 func WrapHandlerFunc(hf func(http.ResponseWriter, *http.Request)) func(http.ResponseWriter, *http.Request) {
 	handlerFuncName := runtime.FuncForPC(reflect.ValueOf(hf).Pointer()).Name()
 
@@ -129,22 +132,26 @@ func sendEvent(ctx context.Context, span *trace.Span) error {
 
 // everything below here is copied from beeline-go/internal
 
+// ResponseWriter ...
 type ResponseWriter struct {
 	http.ResponseWriter
 	Status int
 }
 
+// NewResponseWriter ...
 func NewResponseWriter(w http.ResponseWriter) *ResponseWriter {
 	return &ResponseWriter{
 		ResponseWriter: httpsnoop.Wrap(w, httpsnoop.Hooks{}),
 	}
 }
 
+// WriteHeader ...
 func (h *ResponseWriter) WriteHeader(statusCode int) {
 	h.Status = statusCode
 	h.ResponseWriter.WriteHeader(statusCode)
 }
 
+// AddRequestProps ...
 func AddRequestProps(req *http.Request, ev *trace.Span) {
 	// identify the type of event
 	ev.AddField("meta.type", "http")
